@@ -173,12 +173,15 @@ export async function handleToggleEvent(request, user, env, id) {
 
     const newCompleted = existing.completed ? 0 : 1;
     const now = new Date().toISOString();
+    const completedAt = newCompleted ? now : null;
 
-    await env.DB.prepare('UPDATE events SET completed = ?, updatedAt = ? WHERE id = ? AND userId = ?')
-      .bind(newCompleted, now, id, user.id)
+    await env.DB.prepare(
+      'UPDATE events SET completed = ?, completedAt = ?, updatedAt = ? WHERE id = ? AND userId = ?'
+    )
+      .bind(newCompleted, completedAt, now, id, user.id)
       .run();
 
-    return json({ id, completed: !!newCompleted, updatedAt: now });
+    return json({ id, completed: !!newCompleted, completedAt, updatedAt: now });
   } catch (err) {
     return serverError(err);
   }

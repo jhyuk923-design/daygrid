@@ -1,0 +1,22 @@
+{
+  "name": "daygrid-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DayGrid Cloudflare Worker backend (API + D1)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:create": "wrangler d1 create daygrid-db",
+    "db:migrate:local": "wrangler d1 migrations apply daygrid-db --local",
+    "db:migrate:remote": "wrangler d1 migrations apply daygrid-db --remote",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.128.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260831.1": true
+  }
+}

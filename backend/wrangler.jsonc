@@ -1,0 +1,32 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "daygrid",
+  "main": "src/index.js",
+  "compatibility_date": "2024-11-01",
+
+  // 프론트엔드 빌드 결과물(frontend/dist)을 이 Worker가 함께 서빙합니다.
+  // /api/* 가 아닌 요청은 정적 파일(React 앱)로 응답합니다.
+  "assets": {
+    "directory": "../frontend/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+
+  // Cloudflare D1 (무료 플랜) 바인딩
+  // 아래 database_id는 `npm run db:create`(wrangler d1 create daygrid-db) 실행 후
+  // 콘솔에 출력되는 값으로 반드시 교체해야 합니다.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "daygrid-db",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // 민감하지 않은 설정값. 비밀번호/토큰 같은 값은 여기 두지 않고
+  // `wrangler secret put`(Cloudflare Secrets)으로 관리합니다.
+  "vars": {
+    "SESSION_TTL_DAYS": "7"
+  }
+}

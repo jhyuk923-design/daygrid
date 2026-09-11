@@ -1,10 +1,7 @@
 import React, { useMemo } from 'react';
 import DayCell from './DayCell.jsx';
 import { WEEKDAYS } from '../constants.js';
-
-function pad(n) {
-  return String(n).padStart(2, '0');
-}
+import { pad } from '../dateUtils.js';
 
 function toDateStr(year, month, day) {
   return `${year}-${pad(month)}-${pad(day)}`;

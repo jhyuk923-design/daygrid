@@ -5,10 +5,7 @@
 
 import { json, errorResponse, serverError } from '../utils/response.js';
 import { validateEventInput } from '../utils/validate.js';
-
-function pad(n) {
-  return String(n).padStart(2, '0');
-}
+import { pad } from '../utils/date.js';
 
 // year, month(1~12)로 해당 월의 시작일/종료일(YYYY-MM-DD)을 계산한다.
 function monthRange(year, month) {
@@ -140,7 +137,16 @@ export async function handleUpdateEvent(request, user, env, id) {
       .bind(data.title, data.date, data.startTime, data.endTime, data.category, data.memo, now, id, user.id)
       .run();
 
-    return json({ id, ...data, updatedAt: now });
+    // completed(완료 여부)는 이 요청으로 바뀌지 않지만, 프론트가 기존 항목을 이 응답으로
+    // 통째로 교체하므로 completed를 빼먹으면 화면에서 완료 체크가 풀려 보인다.
+    const row = await env.DB.prepare(
+      `SELECT id, title, date, startTime, endTime, category, memo, completed, completedAt, createdAt, updatedAt
+       FROM events WHERE id = ? AND userId = ?`
+    )
+      .bind(id, user.id)
+      .first();
+
+    return json({ ...row, completed: !!row.completed });
   } catch (err) {
     return serverError(err);
   }

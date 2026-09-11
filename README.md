@@ -188,6 +188,13 @@ npm run db:migrate:remote
 
 두 가지 방법이 있습니다.
 
+> ⚠️ **처음 클론했다면 먼저 한 번**: `backend/wrangler.jsonc`의 `assets.directory`가
+> `../frontend/dist`를 가리키고 있어서, `frontend/dist`가 아예 없는 상태로 `cd backend && npm run dev`를
+> 실행하면 Worker가 시작조차 못 하고 바로 죽습니다. 아래 두 방법 중 무엇을 쓰든 **backend를 처음
+> 띄우기 전에 `cd frontend && npm install && npm run build`를 한 번은 실행**해서 `dist` 폴더를
+> 만들어 두세요. (이후 방법 A로 개발할 때는 `dist` 내용이 오래돼도 상관없습니다 — 프론트는
+> Vite 개발 서버가 따로 서빙하기 때문입니다.)
+
 **방법 A — Vite 개발 서버로 실시간 편집 (추천)**
 
 ```bash

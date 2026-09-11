@@ -58,47 +58,35 @@ export function validateLoginInput(body) {
   return { valid: errors.length === 0, errors };
 }
 
-export function validateEventInput(body, { partial = false } = {}) {
+export function validateEventInput(body) {
   const errors = [];
   const data = {};
 
-  if (!partial || body.title !== undefined) {
-    const title = typeof body.title === 'string' ? body.title.trim() : '';
-    if (!title || title.length > 100) {
-      errors.push('제목은 1~100자로 입력해주세요.');
-    }
-    data.title = title;
+  const title = typeof body.title === 'string' ? body.title.trim() : '';
+  if (!title || title.length > 100) {
+    errors.push('제목은 1~100자로 입력해주세요.');
   }
+  data.title = title;
 
-  if (!partial || body.date !== undefined) {
-    if (!isValidDate(body.date)) errors.push('날짜 형식이 올바르지 않습니다 (YYYY-MM-DD).');
-    data.date = body.date;
-  }
+  if (!isValidDate(body.date)) errors.push('날짜 형식이 올바르지 않습니다 (YYYY-MM-DD).');
+  data.date = body.date;
 
-  if (!partial || body.startTime !== undefined) {
-    if (!isValidTime(body.startTime)) errors.push('시작 시간 형식이 올바르지 않습니다 (HH:MM).');
-    data.startTime = body.startTime || null;
-  }
+  if (!isValidTime(body.startTime)) errors.push('시작 시간 형식이 올바르지 않습니다 (HH:MM).');
+  data.startTime = body.startTime || null;
 
-  if (!partial || body.endTime !== undefined) {
-    if (!isValidTime(body.endTime)) errors.push('종료 시간 형식이 올바르지 않습니다 (HH:MM).');
-    data.endTime = body.endTime || null;
-  }
+  if (!isValidTime(body.endTime)) errors.push('종료 시간 형식이 올바르지 않습니다 (HH:MM).');
+  data.endTime = body.endTime || null;
 
   if (data.startTime && data.endTime && data.startTime > data.endTime) {
     errors.push('종료 시간은 시작 시간보다 늦어야 합니다.');
   }
 
-  if (!partial || body.category !== undefined) {
-    if (!isValidCategory(body.category)) errors.push('올바르지 않은 카테고리입니다.');
-    data.category = body.category;
-  }
+  if (!isValidCategory(body.category)) errors.push('올바르지 않은 카테고리입니다.');
+  data.category = body.category;
 
-  if (!partial || body.memo !== undefined) {
-    const memo = typeof body.memo === 'string' ? body.memo : '';
-    if (memo.length > 1000) errors.push('메모는 1000자를 넘을 수 없습니다.');
-    data.memo = memo;
-  }
+  const memo = typeof body.memo === 'string' ? body.memo : '';
+  if (memo.length > 1000) errors.push('메모는 1000자를 넘을 수 없습니다.');
+  data.memo = memo;
 
   return { valid: errors.length === 0, errors, data };
 }

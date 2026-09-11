@@ -16,6 +16,7 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { pad } from './src/utils/date.js';
 
 const BACKEND_DIR = dirname(fileURLToPath(import.meta.url));
 // npx/wrangler.cmd 대신, 로컬에 설치된 wrangler의 JS 진입점을 node로 직접 실행한다.
@@ -23,10 +24,6 @@ const BACKEND_DIR = dirname(fileURLToPath(import.meta.url));
 const WRANGLER_BIN = join(BACKEND_DIR, 'node_modules', 'wrangler', 'bin', 'wrangler.js');
 const DB_NAME = 'daygrid-db';
 const CATEGORIES = ['study', 'work', 'exercise', 'music', 'appointment', 'etc'];
-
-function pad(n) {
-  return String(n).padStart(2, '0');
-}
 
 function todayStr() {
   const d = new Date();
